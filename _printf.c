@@ -1,45 +1,66 @@
 #include "main.h"
-#include <stdio.h>
+
+void print_buffer(char buffer[], int *buff_ind);
 
 /**
- * _printf - produces output accrding to format
- * @format: character string composed of zero or more directives
- *
- * Return:  the number of characters printed
- * (excluding the null byte used to end output to strings)
+ * _printf - Printf function
+ * @format: format.
+ * Return: Printed chars.
  */
-
 int _printf(const char *format, ...)
 {
-	va_list arguments;
-	unsigned int sum = 0;
-	unsigned int n = 0;
+	int i, printed = 0, printed_chars = 0;
+	int flags, width, precision, size, buff_ind = 0;
+	va_list list;
+	char buffer[BUFF_SIZE];
 
 	if (format == NULL)
-	{
 		return (-1);
-	}
 
-	va_start(arguments, format);
-	for (; format[n] != '\0'; n++)
+	va_start(list, format);
+
+	for (i = 0; format && format[i] != '\0'; i++)
 	{
-		if (format[n] == '\0' || (format[n] == '%' && !format[n + 1]))
+		if (format[i] != '%')
 		{
-			return (-1);
-		}
-		else if (format[n] == '%' && (format[n + 1] == 'd' ||
-			format[n + 1] == 'i' || format[n + 1] == 's' ||
-			format[n + 1] == 'c' || format[n + 1] == '%'))
-		{
-			sum += (*converter(format[n + 1]))(arguments);
-			n++;
+			buffer[buff_ind++] = format[i];
+			if (buff_ind == BUFF_SIZE)
+				print_buffer(buffer, &buff_ind);
+			/* write(1, &format[i], 1);*/
+			printed_chars++;
 		}
 		else
 		{
-			sum += _putchar(format[n]);
+			print_buffer(buffer, &buff_ind);
+			flags = get_flags(format, &i);
+			width = get_width(format, &i, list);
+			precision = get_precision(format, &i, list);
+			size = get_size(format, &i);
+			++i;
+			printed = handle_print(format, &i, list, buffer,
+				flags, width, precision, size);
+			if (printed == -1)
+				return (-1);
+			printed_chars += printed;
 		}
 	}
-	va_end(arguments);
 
-	return (sum);
+	print_buffer(buffer, &buff_ind);
+
+	va_end(list);
+
+	return (printed_chars);
+}
+
+/**
+ * print_buffer - Prints the contents of the buffer if it exist
+ * @buffer: Array of chars
+ * @buff_ind: Index at which to add next char, represents the length.
+ */
+void print_buffer(char buffer[], int *buff_ind)
+{
+	if (*buff_ind > 0)
+		write(1, &buffer[0], *buff_ind);
+
+	*buff_ind = 0;
 }
