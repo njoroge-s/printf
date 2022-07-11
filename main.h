@@ -1,34 +1,29 @@
-#ifndef _MAIN_
-#define _MAIN_
+#ifndef MAIN_H
+#define MAIN_H
 
 #include <unistd.h>
-#include <stdarg.h>
 #include <stdio.h>
-#include <limits.h>
+#include <stdarg.h>
+#include <string.h>
 
 /**
-* struct op - flag / function object
-* @c: flag
-* @f: function
-*/
+ * struct format - structure
+ * @F: char holding the format
+ * @T: pointer function
+ */
 
-typedef struct op
+typedef struct format
 {
-	char *c;
-	int (*f)(va_list);
-} op_t;
+	char F;
+	int (*T)(va_list);
+} fmt;
 
 int _printf(const char *format, ...);
 int _putchar(char c);
-int print_c(va_list ar_list);
-int (*get_func(char s))(va_list ar_list);
-int print_s(va_list ar_list);
-int print_d(va_list ar_list);
-int print_i(va_list ar_numlist);
-int print_b(va_list binary_list);
-int print_u(va_list ar_list);
-int print_o(va_list ar_list);
-int print_x(va_list ar_list);
-int print_X(va_list ar_list);
+int print_str(va_list str_list);
+int print_char(va_list char_list);
+int percentage(__attribute__((unused))va_list param);
+int (*converter(char s))(va_list);
+int print_digit(va_list int_list);
 
-#endif
+#endif /* MAIN_H */
