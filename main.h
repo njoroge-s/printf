@@ -73,4 +73,7 @@ int print_address(va_list l, flags_t *f);
 /* print_percent */
 int print_percent(va_list l, flags_t *f);
 
+/**parameters */
+void init_params(params_t *params, va_list ap);
+
 #endif
