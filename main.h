@@ -72,7 +72,4 @@ int print_address(va_list l, flags_t *f);
 
 /* print_percent */
 int print_percent(va_list l, flags_t *f);
-
-int get_modifier(char *s, params_t *params);
-char *get_width(char *s, params_t *params, va_list ap);
 #endif
